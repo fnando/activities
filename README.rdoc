@@ -1,0 +1,89 @@
+= Introduction
+
+Activities is a gem that enables social activities in ActiveRecord objects.
+
+= Install
+
+  sudo gem install activities
+
+You have to create a migration with the following code:
+
+  create_table :activities do |t|
+    t.references :tracker, :polymorphic => true, :null => false
+    t.references :trackable, :polymorphic => true, :null => false
+    t.string :action, :null => false
+    t.text :data, :null => true
+    t.timestamps
+  end
+
+  add_index :activities, [:tracker_id, :trackable_id]
+  add_index :activities, [:tracker_id, :trackable_id, :action]
+
+If you want the source go to http://github.com/fnando/activities
+
+= Usage
+
+Activities is plugged on associations. So, all you have to do is add something like this:
+
+  class User < ActiveRecord::Base
+    has_many :projects
+    activities_for :projects do
+      track :renamed, :if => proc {|r| !r.new_record? && r.name_changed? }, :on => :save
+      track :create
+      track :update
+      track :destroy
+    end
+  end
+
+This will add activities when you create, update, destroy a project or the change its name.
+
+To retrieve the activities, you can use the association +activities+.
+
+  @user.activities.all
+
+By default, all attributes are stored in a field called +data+. You should overwrite the method
++to_activity+ and return a hash with the attributes that you really want to be saved.
+
+  class Project < ActiveRecord::Base
+    belongs_to :user
+
+    def to_activity
+      { :name => name, :status => status }
+    end
+  end
+
+To display the activities, you should use the helper +render_activity+.
+
+  <% for activity in @activities %>
+    <%= render_activity @activity %>
+  <% end %>
+
+The +render_activity+ helper will render a partial as <tt>app/views/activities/TRACKABLE_TYPE/ACTION</tt>.
+So, if you want to render activities fro that project, you should create the following files:
+
+  app/views/activities/project/_renamed.html.erb
+  app/views/activities/project/_create.html.erb
+  app/views/activities/project/_update.html.erb
+  app/views/activities/project/_destroy.html.erb
+
+The activity object will be available and you can display something like this:
+
+  <p>
+    <%= tracker.name %> created the
+    repository <%= link_to data[:name], project_path(trackable) %>
+    <%= time_ago_in_words data[:created_at] %>
+  </p>
+
+= License
+
+(The MIT License)
+
+Copyright © 2010:
+
+* Nando Vieira - http://simplesideias.com.br
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ‘Software’), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED ‘AS IS’, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
