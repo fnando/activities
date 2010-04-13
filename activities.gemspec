@@ -35,6 +35,12 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{A framework for aggregating social activity.}
+  s.test_files = [
+    "test/activities/active_record_test.rb",
+     "test/resources/models.rb",
+     "test/schema.rb",
+     "test/test_helper.rb"
+  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
