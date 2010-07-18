@@ -6,18 +6,31 @@ Activities is a gem that enables social activities in ActiveRecord objects.
 
   sudo gem install activities
 
-You have to create a migration with the following code:
+You have to create a migration.
 
-  create_table :activities do |t|
-    t.references :tracker, :polymorphic => true, :null => false
-    t.references :trackable, :polymorphic => true, :null => false
-    t.string :action, :null => false
-    t.text :data, :null => true
-    t.timestamps
+* Rails 2: <tt>script/generate migration create_activities</tt>
+* Rails 3: <tt>rails generate migration create_activities</tt>
+
+Then paste the following code.
+
+  class CreateActivities < ActiveRecord::Migration
+    def self.up
+      create_table :activities do |t|
+        t.references :tracker, :polymorphic => true, :null => false
+        t.references :trackable, :polymorphic => true, :null => false
+        t.string :action, :null => false
+        t.text :data, :null => true
+        t.timestamps
+      end
+
+      add_index :activities, [:tracker_id, :trackable_id]
+      add_index :activities, [:tracker_id, :trackable_id, :action]
+    end
+
+    def self.down
+      drop_table :activities
+    end
   end
-
-  add_index :activities, [:tracker_id, :trackable_id]
-  add_index :activities, [:tracker_id, :trackable_id, :action]
 
 If you want the source go to http://github.com/fnando/activities
 
