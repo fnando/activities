@@ -36,7 +36,6 @@ JEWEL = Jeweler::Tasks.new do |gem|
   gem.authors = ["Nando Vieira"]
   gem.version = Activities::Version::STRING
   gem.summary = "A framework for aggregating social activity."
-  gem.add_dependency "activerecord"
   gem.files =  FileList["{README,CHANGELOG}.rdoc", "{lib,test}/**/*", "Rakefile"]
 end
 
