@@ -72,7 +72,7 @@ To display the activities, you should use the helper +render_activity+.
   <% end %>
 
 The +render_activity+ helper will render a partial as <tt>app/views/activities/TRACKABLE_TYPE/ACTION</tt>.
-So, if you want to render activities fro that project, you should create the following files:
+So, if you want to render activities for that project, you should create the following files:
 
   app/views/activities/project/_renamed.html.erb
   app/views/activities/project/_create.html.erb
@@ -93,7 +93,7 @@ The activity object will be available and you can display something like this:
 
 Copyright © 2010:
 
-* Nando Vieira - http://simplesideias.com.br
+* Nando Vieira - http://nandovieira.com.br
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ‘Software’), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
